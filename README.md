@@ -6,8 +6,8 @@
 
 **tmux, the easy way**
 
-[![npm version](https://img.shields.io/npm/v/@bigdealio/bigmux.svg)](https://www.npmjs.com/package/@bigdealio/bigmux)
-[![license](https://img.shields.io/npm/l/@bigdealio/bigmux.svg)](https://github.com/BigDeal-io/BigMux/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/%40bigdealio/bigmux.svg)](https://www.npmjs.com/package/@bigdealio/bigmux)
+[![license](https://img.shields.io/npm/l/%40bigdealio/bigmux.svg)](https://github.com/BigDeal-io/BigMux/blob/main/LICENSE)
 
 BIGMUX is an interactive terminal UI for tmux. Instead of memorizing commands, navigate menus to manage sessions, windows, and panes. Every operation previews the exact tmux command before running it, so you learn tmux as you go.
 
