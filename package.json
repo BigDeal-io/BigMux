@@ -1,5 +1,5 @@
 {
-  "name": "bigmux",
+  "name": "@bigdealio/bigmux",
   "version": "0.1.0",
   "description": "BIGMUX — tmux, the easy way",
   "author": "Fractional CTO Solutions <https://fractionalctosolutions.com> (BIGDEALIO, LLC)",
@@ -14,6 +14,9 @@
   "type": "module",
   "bin": {
     "bigmux": "./dist/bigmux.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist"
