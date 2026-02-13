@@ -9,6 +9,39 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  release-please:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          release-type: node
+
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
       id-token: write
     steps:
       - uses: actions/checkout@v4
@@ -19,30 +52,6 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - run: npm install -g npm@latest
-
       - run: npm ci
-      - run: npm run typecheck
-      - run: npm test
       - run: npm run build
-
-      - name: Check if version is already published
-        id: version-check
-        run: |
-          LOCAL=$(node -p "require('./package.json').version")
-          NAME=$(node -p "require('./package.json').name")
-          REMOTE=$(npm view "$NAME" version 2>/dev/null || echo "none")
-          echo "local=$LOCAL" >> "$GITHUB_OUTPUT"
-          echo "remote=$REMOTE" >> "$GITHUB_OUTPUT"
-          if [ "$LOCAL" != "$REMOTE" ]; then
-            echo "publish=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "publish=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Publish to npm
-        if: steps.version-check.outputs.publish == 'true'
-        run: npm publish --provenance --access public
-
-      - name: Skip publish (version unchanged)
-        if: steps.version-check.outputs.publish == 'false'
-        run: echo "v${{ steps.version-check.outputs.local }} already on npm, skipping publish"
+      - run: npm publish --provenance --access public
